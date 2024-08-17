@@ -9,7 +9,7 @@ export const Pagination = ({ pageCount, handlePageClick }) => {
       nextLabel="Следующая >"
       onPageChange={(event) => handlePageClick(event.selected + 1)}
       pageRangeDisplayed={4}
-      pageCount={3}
+      pageCount={pageCount}
       previousLabel="< Предыдущая"
       renderOnZeroPageCount={null}
     />

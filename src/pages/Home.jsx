@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Categories from '../components/Categories';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort from '../components/Sort';
 import { Pagination } from '../components/Pagination';
+import { SearchContext } from '../App';
 
-export const Home = ({ searchValue }) => {
+export const Home = () => {
+  const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
@@ -21,7 +23,12 @@ export const Home = ({ searchValue }) => {
     const sort = `&sortBy=${sortDirection ? '' : '-'}${sortTypeNames[sortType]}`;
     const search = searchValue ? `&title=*${searchValue}` : '';
 
-    fetch(`https://2e28a9697dc27353.mokky.dev/items?page=${currentPage}&limit=4` + category + sort + search)
+    fetch(
+      `https://2e28a9697dc27353.mokky.dev/items?page=${currentPage}&limit=4` +
+        category +
+        sort +
+        search,
+    )
       .then((res) => res.json())
       .then((json) => {
         setItems(json);
@@ -51,10 +58,10 @@ export const Home = ({ searchValue }) => {
               // .filter((obj) => obj.title.toLowerCase().includes(searchValue.toLowerCase()))
               .map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
       </div>
-        <Pagination
-          handlePageClick={(number) => setCurrentPage(number)}
-          pageCount={!isLoading && items.meta.total_pages} // без !isLoading попадает undefined
-        />
+      <Pagination
+        handlePageClick={(number) => setCurrentPage(number)}
+        pageCount={!isLoading && items.meta.total_pages} // без !isLoading попадает undefined
+      />
     </div>
   );
 };

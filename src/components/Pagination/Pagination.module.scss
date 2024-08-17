@@ -17,7 +17,7 @@
     }
   }
 
-  :global {
+  :global { // если стиль создан не через css modules - надо делать приписку :global
     .selected {
         a {
             background-color: #f79a30;
