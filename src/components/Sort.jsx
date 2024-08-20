@@ -1,12 +1,24 @@
 import { useState } from 'react';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSort } from '../redux/slices/filterSlice';
+
+const list = [
+  { name: 'популярности', sortProperty: 'rating' },
+  { name: 'цене', sortProperty: 'price' },
+  { name: 'алфавиту', sortProperty: 'title' },
+];
 
 function Sort({ sortType, setSortType, sortDirection, setSortDirection }) {
-  const [open, setOpen] = useState(false);
-  const list = ['популярности', 'цене', 'алфавиту'];
+  const sort = useSelector((state) => state.filter.sort);
+  const dispatch = useDispatch();
 
-  const onClickListItem = (i) => {
-    setSortType(i);
+  const [open, setOpen] = useState(false);
+  // const list = ['популярности', 'цене', 'алфавиту'];  
+
+  const onClickListItem = (obj) => {
+    // setSortType(i);
+    dispatch(setSort(obj));
     setOpen(false);
   };
 
@@ -19,17 +31,19 @@ function Sort({ sortType, setSortType, sortDirection, setSortDirection }) {
           <AiFillCaretDown onClick={() => setSortDirection(!sortDirection)} />
         )}
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{list[sortType]}</span>
+        {/* <span onClick={() => setOpen(!open)}>{list[sortType]}</span> */}
+        <span onClick={() => setOpen(!open)}>{sort.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
           <ul>
-            {list.map((name, id) => (
+            {list.map((obj, id) => (
               <li
                 key={id}
-                onClick={() => onClickListItem(id)}
-                className={sortType === id ? 'active' : ''}>
-                {name}
+                // onClick={() => onClickListItem(id)}
+                onClick={() => onClickListItem(obj)}
+                className={sort.sortProperty === id ? 'active' : ''}>
+                {obj.name}
               </li>
             ))}
           </ul>
