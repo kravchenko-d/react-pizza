@@ -1,22 +1,45 @@
 import { CiSearch } from 'react-icons/ci';
 import styles from './Search.module.scss';
 import { IoClose } from 'react-icons/io5';
-import { useContext } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { SearchContext } from '../../App';
+import debounce from 'lodash.debounce';
 
 export const Search = () => {
+  const [value, setValue] = useState('');
   const { searchValue, setSearchValue } = useContext(SearchContext);
+  const inputRef = useRef();
+
+  const onClickClear = () => {
+    setSearchValue('');
+    setValue('');
+    inputRef.current.focus();
+  };
+
+  const updateSearchValue = useCallback(
+    debounce((str) => {
+      setSearchValue(str);
+    }, 150),
+    [],
+  );
+
+  const onChangeInput = (event) => {
+    setValue(event.target.value);
+    updateSearchValue(event.target.value);
+  };
 
   return (
     <div className={styles.root}>
       <CiSearch className={styles.icon} />
       <input
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
+        ref={inputRef}
+        value={value}
+        // onChange={(event) => setSearchValue(event.target.value)}
+        onChange={onChangeInput}
         className={styles.input}
         placeholder="Поиск пиццы..."
       />
-      {searchValue && <IoClose onClick={() => setSearchValue('')} className={styles.close} />}
+      {value && <IoClose onClick={onClickClear} className={styles.close} />}
     </div>
   );
 };

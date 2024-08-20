@@ -9,15 +9,13 @@ const list = [
   { name: 'алфавиту', sortProperty: 'title' },
 ];
 
-function Sort({ sortType, setSortType, sortDirection, setSortDirection }) {
+function Sort({ sortDirection, setSortDirection }) {
   const sort = useSelector((state) => state.filter.sort);
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
-  // const list = ['популярности', 'цене', 'алфавиту'];  
 
   const onClickListItem = (obj) => {
-    // setSortType(i);
     dispatch(setSort(obj));
     setOpen(false);
   };
@@ -31,7 +29,6 @@ function Sort({ sortType, setSortType, sortDirection, setSortDirection }) {
           <AiFillCaretDown onClick={() => setSortDirection(!sortDirection)} />
         )}
         <b>Сортировка по:</b>
-        {/* <span onClick={() => setOpen(!open)}>{list[sortType]}</span> */}
         <span onClick={() => setOpen(!open)}>{sort.name}</span>
       </div>
       {open && (
@@ -40,7 +37,6 @@ function Sort({ sortType, setSortType, sortDirection, setSortDirection }) {
             {list.map((obj, id) => (
               <li
                 key={id}
-                // onClick={() => onClickListItem(id)}
                 onClick={() => onClickListItem(obj)}
                 className={sort.sortProperty === id ? 'active' : ''}>
                 {obj.name}
