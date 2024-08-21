@@ -3,7 +3,7 @@ import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSort } from '../redux/slices/filterSlice';
 
-const list = [
+export const sortList = [
   { name: 'популярности', sortProperty: 'rating' },
   { name: 'цене', sortProperty: 'price' },
   { name: 'алфавиту', sortProperty: 'title' },
@@ -34,7 +34,7 @@ function Sort({ sortDirection, setSortDirection }) {
       {open && (
         <div className="sort__popup">
           <ul>
-            {list.map((obj, id) => (
+            {sortList.map((obj, id) => (
               <li
                 key={id}
                 onClick={() => onClickListItem(obj)}

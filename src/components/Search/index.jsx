@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 
 export const Search = () => {
   const [value, setValue] = useState('');
-  const { searchValue, setSearchValue } = useContext(SearchContext);
+  const { setSearchValue } = useContext(SearchContext);
   const inputRef = useRef();
 
   const onClickClear = () => {
@@ -34,7 +34,6 @@ export const Search = () => {
       <input
         ref={inputRef}
         value={value}
-        // onChange={(event) => setSearchValue(event.target.value)}
         onChange={onChangeInput}
         className={styles.input}
         placeholder="Поиск пиццы..."
