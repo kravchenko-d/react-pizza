@@ -6,17 +6,37 @@ const typeNames = ['тонкое', 'традиционное'];
 
 function PizzaBlock({ id, title, price, imageUrl, sizes, types }) {
   const dispatch = useDispatch();
-  const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id)); // количество товара в карточке
+  // const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id)); // количество товара в карточке
+  const cartItemCount = useSelector((state) =>
+    state.cart.items.reduce((acc, item) => ((item.id === id && item.count) + acc), 0),
+  ); // количество товара в карточке
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
+  const [sizePrice, setSizePrice] = useState(price);
 
-  const addedCount = cartItem ? cartItem.count : 0;
+  // const addedCount = cartItem ? cartItem.count : 0;
+  const addedCount = cartItemCount ? cartItemCount : 0;
+
+  const handleSizeChange = (size) => {
+    setActiveSize(size);
+
+    switch (size) {
+      case 1:
+        setSizePrice(price + 50);
+        break;
+      case 2:
+        setSizePrice(price + 150);
+        break;
+      default:
+        setSizePrice(price);
+    }
+  };
 
   const onClickAdd = () => {
     const item = {
       id,
       title,
-      price,
+      sizePrice,
       imageUrl,
       type: typeNames[activeType],
       size: sizes[activeSize],
@@ -24,7 +44,7 @@ function PizzaBlock({ id, title, price, imageUrl, sizes, types }) {
     dispatch(addItem(item));
   };
 
-  return (
+  return (    
     <div className="pizza-block">
       <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
       <h4 className="pizza-block__title">{title}</h4>
@@ -43,7 +63,7 @@ function PizzaBlock({ id, title, price, imageUrl, sizes, types }) {
           {sizes.map((size, i) => (
             <li
               key={size}
-              onClick={() => setActiveSize(i)}
+              onClick={() => handleSizeChange(i)}
               className={activeSize === i ? 'active' : ''}>
               {size} см
             </li>
@@ -51,7 +71,7 @@ function PizzaBlock({ id, title, price, imageUrl, sizes, types }) {
         </ul>
       </div>
       <div className="pizza-block__bottom">
-        <div className="pizza-block__price">от {price} ₽</div>
+        <div className="pizza-block__price">{sizePrice} ₽</div>
         <button onClick={onClickAdd} className="button button--outline button--add">
           <svg
             width="12"
@@ -65,6 +85,7 @@ function PizzaBlock({ id, title, price, imageUrl, sizes, types }) {
             />
           </svg>
           <span>Добавить</span>
+          {/* {addedCount > 0 && <i>{addedCount}</i>} */}
           {addedCount > 0 && <i>{addedCount}</i>}
         </button>
       </div>
