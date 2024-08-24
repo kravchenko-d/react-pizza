@@ -11,6 +11,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { useNavigate } from 'react-router';
 import { sortList } from '../components/Sort';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -19,34 +20,44 @@ export const Home = () => {
   const isMounted = useRef(false);
 
   const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
+  const { items, meta } = useSelector((state) => state.pizza.items);
+  const { status } = useSelector((state) => state.pizza);
 
   const { searchValue } = useContext(SearchContext);
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [sortDirection, setSortDirection] = useState(false);
 
   const onChangePage = (number) => {
     dispatch(setCurrentPage(number));
   };
 
-  const fetchPizzas = async () => {
-    setIsLoading(true);
+  const getPizzas = async () => {
+    // setIsLoading(true);
 
     const category = categoryId === 0 ? '' : `&category=${categoryId}`;
     const sortItems = `&sortBy=${sortDirection ? '' : '-'}${sort.sortProperty}`;
     const search = searchValue ? `&title=*${searchValue}` : '';
 
-    try {
-      const res = await axios.get(
-        `https://2e28a9697dc27353.mokky.dev/items?page=${currentPage}&limit=4${category}${sortItems}${search}`,
+    // try {
+      // const res = await axios.get(
+      //   `https://2e28a9697dc27353.mokky.dev/items?page=${currentPage}&limit=4${category}${sortItems}${search}`,
+      // );
+      dispatch(
+        fetchPizzas({
+          category,
+          sortItems,
+          search,
+          currentPage,
+        }),
       );
-      setItems(res.data);
-    } catch (error) {
-      console.log(error, 'AXIOS ERROR');
-      alert('Ошибка при получении пицц');
-    } finally {      
-      setIsLoading(false);
-    }
+    // }
+    //  catch (error) {
+    //   console.log(error, 'AXIOS ERROR');
+    //   alert('Ошибка при получении пицц');
+    // }
+    //  finally {
+    //   setIsLoading(false);
+    // }
 
     window.scrollTo(0, 0);
   };
@@ -87,7 +98,7 @@ export const Home = () => {
     window.scrollTo(0, 0);
 
     if (!isSearch.current || window.location.search) {
-      fetchPizzas();
+      getPizzas();
 
       isSearch.current = false;
     }
@@ -102,17 +113,33 @@ export const Home = () => {
       <h2 className="content__title">
         {searchValue ? `Результаты поиска: "${searchValue}"` : 'Все пиццы'}
       </h2>
+      {status === 'error' ? (
+        <div className='content__error-info'>
+          <h2>Произошла ошибка 😕</h2>
+          <p>К сожалению, не удалось загрузить пиццы.<br />Попробуйте повторить попытку позже.</p>
+        </div>
+        
+      ) : 
+      <>
       <div className="content__items">
-        {isLoading
-          ? [...Array(6).fill(null)].map((_, index) => <Skeleton key={index} />)
-          : items.items // при добавлении пагинации от mokky.dev возвращается не массив, а объект со свойствами meta и items
-              .map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
-      </div>
-      <Pagination
+      {/* {isLoading */}
+      {status === 'loading'
+        ? [...Array(6).fill(null)].map((_, index) => <Skeleton key={index} />)
+        : items // при добавлении пагинации от mokky.dev возвращается не массив, а объект со свойствами meta и items
+            .map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
+    </div>
+    <Pagination
         currentPage={currentPage}
         handlePageClick={onChangePage}
-        pageCount={!isLoading && items.meta.total_pages} // без !isLoading попадает undefined
+        // pageCount={!isLoading && meta.total_pages} // без !isLoading попадает undefined
+        pageCount={status !== 'loading' && meta.total_pages} // без !isLoading попадает undefined
       />
+      </>
+      
+    
+    }
+      
+      
     </div>
   );
 };
