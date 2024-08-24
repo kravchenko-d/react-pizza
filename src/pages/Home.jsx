@@ -29,21 +29,26 @@ export const Home = () => {
     dispatch(setCurrentPage(number));
   };
 
-  const fetchPizzas = () => {
+  const fetchPizzas = async () => {
     setIsLoading(true);
 
     const category = categoryId === 0 ? '' : `&category=${categoryId}`;
     const sortItems = `&sortBy=${sortDirection ? '' : '-'}${sort.sortProperty}`;
     const search = searchValue ? `&title=*${searchValue}` : '';
 
-    axios
-      .get(
+    try {
+      const res = await axios.get(
         `https://2e28a9697dc27353.mokky.dev/items?page=${currentPage}&limit=4${category}${sortItems}${search}`,
-      )
-      .then((response) => {
-        setItems(response.data);
-        setIsLoading(false);
-      });
+      );
+      setItems(res.data);
+    } catch (error) {
+      console.log(error, 'AXIOS ERROR');
+      alert('Ошибка при получении пицц');
+    } finally {      
+      setIsLoading(false);
+    }
+
+    window.scrollTo(0, 0);
   };
 
   // если изменили параметры и был первый рендер

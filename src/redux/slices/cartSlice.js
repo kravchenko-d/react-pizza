@@ -25,7 +25,6 @@ const cartSlice = createSlice({
     },
     minusItem(state, action) {
       const findItem = state.items.find((obj) => obj.id === action.payload.id  && obj.type === action.payload.type && obj.size === action.payload.size);
-      // const findItem = state.items.find((obj) => obj.id === action.payload);
       console.log(action.payload)
       if(findItem.count > 0) {
         findItem.count--;
