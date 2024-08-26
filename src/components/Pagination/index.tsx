@@ -5,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 type PaginationProps = {
   currentPage: number;
   pageCount: number;
-  handlePageClick: any;
+  handlePageClick: (page: number) => void;
 }
 
 export const Pagination: FC<PaginationProps> = ({ currentPage, pageCount, handlePageClick }) => {

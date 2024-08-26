@@ -2,7 +2,7 @@ import { FC } from "react";
 
 type CategoriesProps = {
   categoryId: number;
-  setCategoryId: any;
+  setCategoryId: (id: number) => void;
 }
 
 const Categories: FC<CategoriesProps> = ({ categoryId, setCategoryId }) => {
