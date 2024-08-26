@@ -1,9 +1,13 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-export const FullPizza = () => {
-  const [pizza, setPizza] = useState([]);
+export const FullPizza: FC = () => {
+  const [pizza, setPizza] = useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+  }>();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -13,7 +17,7 @@ export const FullPizza = () => {
         const { data } = await axios.get(`https://2e28a9697dc27353.mokky.dev/items/${id}`);
         setPizza(data);
       } catch (error) {
-        alert('AXIOS', error);
+        alert('Ошибка при загрузке');
         navigate('/');
       }
     }

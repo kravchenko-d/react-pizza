@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { CartItem } from '../components/CartItem';
 import { clearItems, selectCart } from '../redux/slices/cartSlice';
 import { CartEmpty } from '../components/CartEmpty';
+import { FC } from 'react';
 
-export const Cart = () => {
+export const Cart: FC = () => {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector(selectCart);
 
@@ -87,14 +88,14 @@ export const Cart = () => {
           </div>
         </div>
         <div className="content__items">
-          {items.map((item, id) => (
+          {items.map((item: any, id: number) => (
             <CartItem key={id} {...item} />
           ))}
         </div>
         <div className="cart__bottom">
           <div className="cart__bottom-details">
             <span>
-              Всего пицц: <b>{items.reduce((acc, item) => item.count + acc, 0)} шт.</b>
+              Всего пицц: <b>{items.reduce((acc: number, item: any) => acc + item.count, 0)} шт.</b>
             </span>
             <span>
               Сумма заказа: <b>{totalPrice} ₽</b>

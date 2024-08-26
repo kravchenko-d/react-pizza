@@ -55,7 +55,7 @@ function Header() {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>{items.reduce((acc, item) => item.count + acc, 0)}</span>
+                <span>{items.reduce((acc: number, item: any) => acc + item.count, 0)}</span>
               </div>
             </Link>
           )}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import Categories from '../components/Categories';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 import { sortList } from '../components/Sort';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 
-export const Home = () => {
+export const Home: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSearch = useRef(false);
@@ -19,12 +19,13 @@ export const Home = () => {
 
   const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
   const { items, meta } = useSelector(selectPizzaData);
+  // @ts-ignore
   const { status } = useSelector((state) => state.pizza);
 
   const [sortDirection, setSortDirection] = useState(false);
 
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number));
+  const onChangePage = (page: number) => {
+    dispatch(setCurrentPage(page));
   };
 
   const getPizzas = async () => {
@@ -33,6 +34,7 @@ export const Home = () => {
     const search = searchValue ? `&title=*${searchValue}` : '';
 
     dispatch(
+      // @ts-ignore
       fetchPizzas({
         category,
         sortItems,
@@ -89,7 +91,7 @@ export const Home = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories categoryId={categoryId} setCategoryId={(id) => dispatch(setCategoryId(id))} />
+        <Categories categoryId={categoryId} setCategoryId={(id: number) => dispatch(setCategoryId(id))} />
         <Sort sortDirection={sortDirection} setSortDirection={setSortDirection} />
       </div>
       <h2 className="content__title">
@@ -110,7 +112,7 @@ export const Home = () => {
             {status === 'loading'
               ? [...Array(6).fill(null)].map((_, index) => <Skeleton key={index} />)
               : items // при добавлении пагинации от mokky.dev возвращается не массив, а объект со свойствами meta и items
-                  .map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
+                  .map((obj: any) => <PizzaBlock key={obj.id} {...obj} />)}
           </div>
           <Pagination
             currentPage={currentPage}
