@@ -5,13 +5,13 @@ import { selectSort, setSort } from '../redux/slices/filterSlice';
 
 type SortItem = {
   name: string;
-  sortProperty: string;
-}
+  sortProperty: 'rating' | 'title' | 'price';
+};
 
 type SortProps = {
   sortDirection: boolean;
   setSortDirection: any;
-}
+};
 
 export const sortList: SortItem[] = [
   { name: 'популярности', sortProperty: 'rating' },
@@ -61,7 +61,7 @@ const Sort: FC<SortProps> = ({ sortDirection, setSortDirection }) => {
               <li
                 key={id}
                 onClick={() => onClickListItem(obj)}
-                className={sort.sortProperty === id ? 'active' : ''}>
+                className={sort.sortProperty === obj.name ? 'active' : ''}>
                 {obj.name}
               </li>
             ))}
@@ -70,6 +70,6 @@ const Sort: FC<SortProps> = ({ sortDirection, setSortDirection }) => {
       )}
     </div>
   );
-}
+};
 
 export default Sort;

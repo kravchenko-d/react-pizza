@@ -4,23 +4,27 @@ import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort from '../components/Sort';
 import { Pagination } from '../components/Pagination';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectFilter, setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { useSelector } from 'react-redux';
+import {
+  selectFilter,
+  setCategoryId,
+  setCurrentPage,
+  setFilters,
+} from '../redux/slices/filterSlice';
 import qs from 'qs';
 import { useNavigate } from 'react-router';
 import { sortList } from '../components/Sort';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { useAppDispatch } from '../redux/store';
 
 export const Home: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
   const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
-  const { items, meta } = useSelector(selectPizzaData);
-  // @ts-ignore
-  const { status } = useSelector((state) => state.pizza);
+  const { items, status } = useSelector(selectPizzaData);
 
   const [sortDirection, setSortDirection] = useState(false);
 
@@ -34,7 +38,6 @@ export const Home: FC = () => {
     const search = searchValue ? `&title=*${searchValue}` : '';
 
     dispatch(
-      // @ts-ignore
       fetchPizzas({
         category,
         sortItems,
@@ -64,13 +67,13 @@ export const Home: FC = () => {
   useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
-
       const sort = sortList.find((obj) => obj.sortProperty === params.sortProperty);
-
       dispatch(
         setFilters({
-          ...params,
-          sort,
+          searchValue,
+          categoryId,
+          currentPage,
+          sort: sort || sortList[0],
         }),
       );
       isSearch.current = true;
@@ -91,7 +94,10 @@ export const Home: FC = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories categoryId={categoryId} setCategoryId={(id: number) => dispatch(setCategoryId(id))} />
+        <Categories
+          categoryId={categoryId}
+          setCategoryId={(id: number) => dispatch(setCategoryId(id))}
+        />
         <Sort sortDirection={sortDirection} setSortDirection={setSortDirection} />
       </div>
       <h2 className="content__title">
@@ -111,13 +117,13 @@ export const Home: FC = () => {
           <div className="content__items">
             {status === 'loading'
               ? [...Array(6).fill(null)].map((_, index) => <Skeleton key={index} />)
-              : items // при добавлении пагинации от mokky.dev возвращается не массив, а объект со свойствами meta и items
+              : items.items // при добавлении пагинации от mokky.dev возвращается не массив, а объект со свойствами meta и items
                   .map((obj: any) => <PizzaBlock key={obj.id} {...obj} />)}
           </div>
           <Pagination
             currentPage={currentPage}
             handlePageClick={onChangePage}
-            pageCount={status !== 'loading' && meta.total_pages} // без !isLoading попадает undefined
+            pageCount={status === 'loading' ? 1 : items.meta.total_pages} // без !isLoading попадает undefined
           />
         </>
       )}
