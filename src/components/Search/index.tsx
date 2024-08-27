@@ -4,7 +4,7 @@ import { IoClose } from 'react-icons/io5';
 import { ChangeEvent, FC, useCallback, useRef, useState } from 'react';
 import debounce from 'lodash.debounce';
 import { useDispatch } from 'react-redux';
-import { setSearchValue } from '../../redux/slices/filterSlice';
+import { setSearchValue } from '../../redux/filter/slice';
 
 export const Search: FC = () => {
   const dispatch = useDispatch();

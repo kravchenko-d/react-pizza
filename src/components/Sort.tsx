@@ -1,7 +1,8 @@
 import { FC, memo, useEffect, useRef, useState } from 'react';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
-import { setSort, Sort } from '../redux/slices/filterSlice';
+import { setSort } from '../redux/filter/slice';
+import { Sort } from '../redux/filter/types';
 
 type SortItem = {
   name: string;

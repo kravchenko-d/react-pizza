@@ -8,7 +8,6 @@ type CategoriesProps = {
 const Categories: FC<CategoriesProps> = memo(
   ({ categoryId, setCategoryId }) => {
     const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
-    console.log(1)
     return (
       <div className="categories">
         <ul>
