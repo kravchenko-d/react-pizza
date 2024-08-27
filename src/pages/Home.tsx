@@ -1,8 +1,7 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import Categories from '../components/Categories';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
-import Sort from '../components/Sort';
 import { Pagination } from '../components/Pagination';
 import { useSelector } from 'react-redux';
 import {
@@ -13,7 +12,7 @@ import {
 } from '../redux/slices/filterSlice';
 import qs from 'qs';
 import { useNavigate } from 'react-router';
-import { sortList } from '../components/Sort';
+import SortPopup, { sortList } from '../components/Sort';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { useAppDispatch } from '../redux/store';
 
@@ -27,6 +26,8 @@ export const Home: FC = () => {
   const { items, status } = useSelector(selectPizzaData);
 
   const [sortDirection, setSortDirection] = useState(false);
+
+  const onChangeCategory = useCallback((id: number) => dispatch(setCategoryId(id)), []);
 
   const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -96,9 +97,9 @@ export const Home: FC = () => {
       <div className="content__top">
         <Categories
           categoryId={categoryId}
-          setCategoryId={(id: number) => dispatch(setCategoryId(id))}
+          setCategoryId={onChangeCategory}
         />
-        <Sort sortDirection={sortDirection} setSortDirection={setSortDirection} />
+        <SortPopup value={sort} sortDirection={sortDirection} setSortDirection={setSortDirection} />
       </div>
       <h2 className="content__title">
         {searchValue ? `Результаты поиска: "${searchValue}"` : 'Все пиццы'}

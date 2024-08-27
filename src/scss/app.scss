@@ -219,8 +219,24 @@ body {
 
       &-minus {
         svg {
-          path:first-of-type {
+          path:first-of-type { // превращает минус в плюс
             display: none;
+          }
+        }        
+        &:disabled {
+          opacity: 0.1;
+          svg {
+            path:first-of-type { // превращает минус в плюс
+              display: none;
+            }
+          }
+
+          &:active {
+            transform: none;
+          }
+
+          &:hover {
+            cursor: not-allowed;
           }
         }
       }

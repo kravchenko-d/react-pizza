@@ -1,7 +1,7 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectSort, setSort } from '../redux/slices/filterSlice';
+import { useDispatch } from 'react-redux';
+import { setSort, Sort } from '../redux/slices/filterSlice';
 
 type SortItem = {
   name: string;
@@ -9,6 +9,7 @@ type SortItem = {
 };
 
 type SortProps = {
+  value: Sort;
   sortDirection: boolean;
   setSortDirection: any;
 };
@@ -19,8 +20,7 @@ export const sortList: SortItem[] = [
   { name: 'алфавиту', sortProperty: 'title' },
 ];
 
-const Sort: FC<SortProps> = ({ sortDirection, setSortDirection }) => {
-  const sort = useSelector(selectSort);
+const SortPopup: FC<SortProps> = memo(({ value, sortDirection, setSortDirection }) => {
   const dispatch = useDispatch();
   const sortRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +52,7 @@ const Sort: FC<SortProps> = ({ sortDirection, setSortDirection }) => {
           <AiFillCaretDown onClick={() => setSortDirection(!sortDirection)} />
         )}
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{sort.name}</span>
+        <span onClick={() => setOpen(!open)}>{value.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -61,7 +61,7 @@ const Sort: FC<SortProps> = ({ sortDirection, setSortDirection }) => {
               <li
                 key={id}
                 onClick={() => onClickListItem(obj)}
-                className={sort.sortProperty === obj.name ? 'active' : ''}>
+                className={value.sortProperty === obj.name ? 'active' : ''}>
                 {obj.name}
               </li>
             ))}
@@ -70,6 +70,6 @@ const Sort: FC<SortProps> = ({ sortDirection, setSortDirection }) => {
       )}
     </div>
   );
-};
+});
 
-export default Sort;
+export default SortPopup;
