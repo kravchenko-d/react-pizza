@@ -28,7 +28,7 @@
     "web-vitals": "^2.1.4"
   },
   "overrides": {
-    "fork-ts-checker-webpack-plugin": "^9.6.7"
+    "fork-ts-checker-webpack-plugin": "^6.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
