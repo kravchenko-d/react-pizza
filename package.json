@@ -27,6 +27,9 @@
     "typescript": "^5.5.4",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^10.0.0"
+  },
   "overrides": {
     "typescript": "^5.5.4"
   },
