@@ -224,7 +224,7 @@ body {
           }
         }        
         &:disabled {
-          opacity: 0.1;
+          opacity: 0.2;
           svg {
             path:first-of-type { // превращает минус в плюс
               display: none;

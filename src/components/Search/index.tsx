@@ -32,13 +32,16 @@ export const Search: FC = () => {
   return (
     <div className={styles.root}>
       <CiSearch className={styles.icon} />
-      <input
-        ref={inputRef}
-        value={value}
-        onChange={onChangeInput}
-        className={styles.input}
-        placeholder="Поиск пиццы..."
-      />
+      <form>
+        <input
+          name='search'
+          ref={inputRef}
+          value={value}
+          onChange={onChangeInput}
+          className={styles.input}
+          placeholder="Поиск пиццы..."
+        />
+      </form>
       {value && <IoClose onClick={onClickClear} className={styles.close} />}
     </div>
   );

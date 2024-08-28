@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectCart } from '../redux/cart/selectors';
 import { useEffect, useRef } from 'react';
 
-function Header() {
+export function Header() {
   const { items, totalPrice } = useSelector(selectCart);
   const location = useLocation();
   const isMounted = useRef(false);
@@ -74,5 +74,3 @@ function Header() {
     </div>
   );
 }
-
-export default Header;

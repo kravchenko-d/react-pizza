@@ -1,24 +1,22 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import Categories from '../components/Categories';
-import PizzaBlock from '../components/PizzaBlock';
-import Skeleton from '../components/PizzaBlock/Skeleton';
-import { Pagination } from '../components/Pagination';
+
+import { Skeleton, Categories, PizzaBlock, Pagination, SortPopup } from '../components';
+
 import { useSelector } from 'react-redux';
 import qs from 'qs';
 import { useNavigate } from 'react-router';
-import SortPopup, { sortList } from '../components/Sort';
 import { useAppDispatch } from '../redux/store';
 import { selectFilter } from '../redux/filter/selectors';
 import { selectPizzaData } from '../redux/pizza/selectors';
 import { setCategoryId, setCurrentPage, setFilters } from '../redux/filter/slice';
 import { fetchPizzas } from '../redux/pizza/asyncActions';
+import { sortList } from '../components/Sort';
 
 export const Home: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
-
   const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
 
@@ -92,10 +90,7 @@ export const Home: FC = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          categoryId={categoryId}
-          setCategoryId={onChangeCategory}
-        />
+        <Categories categoryId={categoryId} setCategoryId={onChangeCategory} />
         <SortPopup value={sort} sortDirection={sortDirection} setSortDirection={setSortDirection} />
       </div>
       <h2 className="content__title">

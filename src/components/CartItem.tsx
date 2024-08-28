@@ -13,7 +13,7 @@ type CartItemProps = {
   imageUrl: string;
 };
 
-export const CartItemBlock: FC<CartItemProps> = ({
+const CartItemBlock: FC<CartItemProps> = ({
   id,
   title,
   type,
@@ -104,3 +104,5 @@ export const CartItemBlock: FC<CartItemProps> = ({
     </div>
   );
 };
+
+export default CartItemBlock;
