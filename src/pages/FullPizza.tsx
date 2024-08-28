@@ -8,6 +8,8 @@ const FullPizza: FC = () => {
     imageUrl: string;
     title: string;
     price: number;
+    sizes: number[];
+    types: number[];
   }>();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -31,9 +33,11 @@ const FullPizza: FC = () => {
 
   return (
     <div className="container">
-      <img src={pizza.imageUrl} alt={pizza.title} />
-      <h2>{pizza.title}</h2>
-      <h4>{pizza.price} ₽</h4>
+      <div className="product">
+      <img style={{ margin: '12px 0' }} src={pizza.imageUrl} alt={pizza.title} />
+      <h2 style={{ marginBottom: '12px' }}>{pizza.title}</h2>
+      <h3 style={{marginBottom: '20px'}} >Цена: от {pizza.price} ₽</h3>
+      </div>
       <Link to="/">
         <button className="button button--outline button--add">
           <span>Назад</span>

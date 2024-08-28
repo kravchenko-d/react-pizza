@@ -47,11 +47,13 @@ const SortPopup: FC<SortProps> = memo(({ value, sortDirection, setSortDirection 
   return (
     <div ref={sortRef} className="sort">
       <div className="sort__label">
+        <div className='sort__direction'>
         {sortDirection ? (
           <AiFillCaretUp onClick={() => setSortDirection(!sortDirection)} />
         ) : (
           <AiFillCaretDown onClick={() => setSortDirection(!sortDirection)} />
         )}
+        </div>        
         <b>Сортировка по:</b>
         <span onClick={() => setOpen(!open)}>{value.name}</span>
       </div>
